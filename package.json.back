@@ -1,0 +1,16 @@
+{
+  "name": "MammothcodeToolLib",
+  "description": "Mammothcode tool library to create the code or document",
+  "version": "0.1",
+  "main": "js/app.js",
+  "jshintConfig": {
+      "expr": true,
+      "esversion": 6,
+      "predef": [
+          "Vue",
+          "McVue",
+          "VueStrap",
+          "Prism"
+      ]
+  }
+}

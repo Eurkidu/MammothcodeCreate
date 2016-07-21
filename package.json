@@ -1,0 +1,23 @@
+{
+  "name": "mc_create_tool",
+  "version": "1.0.0",
+  "description": "Mammmothcode Create Tools",
+  "main": "js/app.js",
+  "dependencies": {
+    "js-beautify": "^1.6.3",
+    "iconv-lite": "^0.4.13"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "Mammothcode"
+  },
+  "keywords": [
+    "Mammothcode"
+  ],
+  "author": "Zero",
+  "license": "ISC"
+}

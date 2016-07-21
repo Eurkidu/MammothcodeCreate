@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="../css/Main.css">
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+    <script type="text/javascript" src="../js/jquery.mCustomScrollbar.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.mousewheel.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
+    <script type="text/javascript" src="../js/json2.js"></script>
+    <script src="../js/vue.js" charset="utf-8"></script>
+    <script src="../js/frame.js" charset="utf-8"></script>
+    <script src="../js/mc.codePack.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="../css/jquery.mCustomScrollbar.min.css">
+    <title>曼码工具库</title>
+</head>
+<body id="app">
+    <div class="app-frame bg">
+        <div id="tool_bar" class="app-drag-bar fbox">
+            <div class="head-bar bf1">MammothcodeAvalonCodePack</div>
+            <div id="dev_windows_btn" class="tool-set"><i class="fa fa-cog"></i></div>
+            <div id="min_windows_btn" class="tool-min"><i class="iconfont icon-move"></i></div>
+            <div id="close_windows_btn" class="tool-close"><i class="iconfont icon-close"></i></div>
+        </div>
+        <div class="app-page-cotar">
+            <div class="doc-create-cotar">
+                <div class="main-box opt-box">
+                    <!-- 配置项 -->
+                    <div class="config-wrap">
+                        <div class="item">
+                            <span>源代码路径</span>
+                            <p id="work_path" class="path-show">{{workPath}}</p>
+                            <div class="btn" v-on:click="selectWorkPath">选择路径</div>
+                        </div>
+                        <div class="item">
+                            <span>打包完的文件保存路径</span>
+                            <p id="output_path" class="path-show">{{outputPath}}</p>
+                            <div class="btn" v-on:click="selectOutputPath">选择路径</div>
+                        </div>
+                    </div>
+                    <!-- 打包 -->
+                    <div class="btn" onclick="createDoc()">打包</div>
+                </div>
+                <div class="main-box msg-box">
+                    <!-- 消息显示 -->
+                    <div id="msg_content" class="msg-wrap"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script type="text/javascript">
+$(function(){
+    //初始化布局
+    iniLayout();
+})
+//初始化布局
+function iniLayout(elem) {
+   //把线性布局与布局管理器关联
+   var $mamager = $(elem).find(".mc-absolute-item");
+   var $linear = $(elem).find(".mc-linear-item");
+   $mamager.each(function (i, val) {
+       $linear.eq(i).css({
+           height: val.offsetHeight,
+           width: val.offsetWidth
+       });
+   });
+}
+</script>

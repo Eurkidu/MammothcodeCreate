@@ -1,0 +1,1 @@
+{"controllerName":{"label":"页面控制器名称","value":"test"},"pageName":{"label":"页面名","value":"1"},"fieldList":[{"index":0,"label":"2","dataId":"3","formType":"text"}]}

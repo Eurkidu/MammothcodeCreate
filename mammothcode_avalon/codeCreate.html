@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="../css/iconfont/iconfont.css"/>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/Main.css">
+    <script type="text/javascript" src="../js/jquery-1.8.3.min.js"></script>
+    <script src="../js/template.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="../js/prism/prism.css">
+    <script src="../js/prism/prism.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/json2.js"></script>
+    <script src="../js/vue.js" charset="utf-8"></script>
+    <script src="../js/vue-strap.min.js" charset="utf-8"></script>
+    <script src="../js/mc-vue.js" charset="utf-8"></script>
+    <script src="../js/frame.js" charset="utf-8"></script>
+    <script src="../js/mc.codeCreate.js" charset="utf-8"></script>
+    <title>曼码后台生成工具</title>
+</head>
+<body id="app">
+    <div class="app-frame bg">
+        <div id="tool_bar" class="app-drag-bar fbox">
+            <div class="head-bar bf1">MammothcodeAvalonCodeCreate</div>
+            <div id="dev_windows_btn" class="tool-set"><i class="fa fa-cog"></i></div>
+            <div id="min_windows_btn" class="tool-min"><i class="iconfont icon-move"></i></div>
+            <div id="close_windows_btn" class="tool-close"><i class="iconfont icon-close"></i></div>
+        </div>
+        <div class="app-page-cotar">
+            <div class="container-fluid code-create-cotar">
+                <div class="row">
+                    <!-- 侧边组件工具栏 -->
+                    <div class="col-sm-2" style="height:630px;overflow:auto;">
+                        <accordion>
+                            <panel header="文件">
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="newConfigFile">新建</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="loadConfigFile">载入</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="saveConfigFile">保存</div>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="addLayout">创建布局</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="addCRUD">创建CRUD</div>
+                                </div> -->
+                            </panel>
+                            <panel header="操作" :is-open="true">
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="addSearch">添加搜索条件</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="addOperate">添加数据表操作</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="addField">添加字段</div>
+                                </div>
+                                
+                            </panel>
+                            <panel header="结果" :is-open="true">
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="copyHtmlData">复制Html代码</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="copyJsData">复制Js代码</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="showCRUDHtml">查看Html代码</div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn btn-primary" v-on:click="showCRUDCode">查看Js代码</div>
+                                </div>
+                            </panel>
+                            <!-- <panel header="Test">
+
+                            </panel> -->
+                        </accordion>
+                    </div>
+                    <!-- 工作区域 -->
+                    <div class="col-sm-10" v-on:contextmenu="showMenu" style="background:#fff;height:630px;overflow:auto;">
+                        <!-- 布局管理 -->
+                        <div class="layout-manager" style="padding:15px 0">
+                            <!-- 填写 -->
+                            <div class="mc-txt-cotar form-horizontal">
+                                <template v-for="el in CRUDdata">
+                                    <template v-if="el|isObject">
+                                        <div class="form-group">
+                                            <div class="col-sm-3 control-label">{{el.label}}</div>
+                                            <div class="col-sm-9"><input class="form-control" type="text" v-model="el.value"></div>
+                                        </div>
+                                    </template>
+                                </template>
+                                <!-- 搜索列表 -->
+                                <template v-for="el in CRUDdata.searchList">
+                                    <div class="form-group">
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.sort" placeholder="排序" v-on:blur="sortSearch"></div>
+                                        <div class="col-sm-3"><input class="form-control" type="text" v-model="el.text" placeholder="搜索条件文本"></div>
+                                        <div class="col-sm-3"><input class="form-control" type="text" v-model="el.value" placeholder="搜索条件字段值"></div>
+                                        <div class="col-sm-1">
+                                            <div class="btn btn-primary" v-on:click="delSearch(el)">删除</div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <!-- 操作列表 -->
+                                <template v-for="el in CRUDdata.operateList">
+                                    <div class="form-group">
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.sort" placeholder="排序" v-on:blur="sortOperate"></div>
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.headTxt" placeholder="表头文本"></div>
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.label" placeholder="按钮文本"></div>
+                                        <div class="col-sm-5"><input class="form-control" type="text" v-model="el.url" placeholder="该操作请求的url"></div>
+                                        <div class="col-sm-1">
+                                            <div class="btn btn-primary" v-on:click="delOperate(el)">删除</div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <!-- 字段列表 -->
+                                <template v-for="el in CRUDdata.fieldList">
+                                    <div class="form-group">
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.sort" placeholder="排序" v-on:blur="sortField"></div>
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.label" placeholder="字段label"></div>
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.dataId" placeholder="字段dataId"></div>
+                                        <div class="col-sm-2"><input class="form-control" type="text" v-model="el.width" placeholder="宽度"></div>
+                                        <div class="col-sm-4">
+                                            <label class="checkbox-inline" v-for="ftel in el.fieldType">
+                                                <input type="checkbox" v-model="ftel.value">{{ftel.label}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-sm-2 control-label">字段显示类型</div>
+                                        <div class="col-sm-8">
+                                            <label class="radio-inline" v-for="ftel in formType">
+                                                <input type="radio" name="formtype{{$parent.$index}}" v-model="el.formType" v-bind:value="ftel.value" v-on:click="changeFormType($parent.$index,ftel.value)">{{ftel.label}}
+                                            </label>
+                                        </div>
+                                        <div v-if="$index !== 0" class="col-sm-2">
+                                            <div class="btn btn-primary" v-on:click="delField(el)">删除</div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                            <!-- 显示位置勾选 -->
+                            <div class="mc-txt-cotar form-horizontal">
+                                <div class="form-group">
+                                    <div class="col-sm-2 control-label">字段显示位置</div>
+                                </div>
+                                <template v-for="el in CRUDdata.fieldList">
+                                    <div class="form-group">
+                                        <div class="col-sm-2 control-label">字段{{el.label}}</div>
+                                        <div class="col-sm-10">
+                                            <label class="checkbox-inline" v-for="ftel in el.showPosition">
+                                                <input type="checkbox" v-model="ftel.value">{{ftel.label}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 属性编辑区域 -->
+                    <div class="property-cotar"></div>
+                    <!-- 代码显示区 -->
+                    <div class="code-show-cotar" v-show="codeCotarShow">
+                        <div class="header cfa">
+                            <div class="headline lfp">查看代码</div>
+                            <div class="rfp">
+                                <div class="btn btn-primary" v-on:click="copyData">复制</div>
+                                <div class="btn btn-primary" v-on:click="codeCotarHide">关闭</div>
+                            </div>
+                        </div>
+                        <div class="code-wrap" v-show="showPanel === 'html'">
+                            <pre><code id="html_content" class="line-numbers language-html"></code></pre>
+                        </div>
+                        <div class="code-wrap" v-show="showPanel === 'js'">
+                            <pre><code id="js_content" class="line-numbers language-javascript"></code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右键菜单 -->
+                <div class="menu-list-cotar" v-show="menuShow"
+                    v-bind:style="menuStyleObj">
+                    <div class="item" v-on:click="menuClick">分割</div>
+                    <div class="item" v-on:click="menuClick">删除</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script id="CRUDHtml" type="text/html">
+<div ms-controller="{{data.controllerName.value}}">
+    <mc:absolutelayout top="0" left="0" right="0" height="60" pb="10">
+        <mc:bread slot="content" class="mc-bread-wrap" config="$bread_opt"></mc:bread>
+    </mc:absolutelayout>
+    <mc:absolutelayout top="60" left="0" right="0" bottom="0" padding="10">
+        <div slot="content" class="mc-cotar">
+            <mc:linearlayout config="$linearlayout_opt">
+                <div slot="content0" class="mc-panel">
+                    <mc:relativelayout padding="10px 15px">
+                        <div slot="content">
+                            <div class="lfp">{{data.pageName.value}}</div>
+                            <div class="rfp">
+                                <div class="hor-list">
+                                    <mc:selectbox class="item" config="$sort_select_opt" label="排序" label-size="50" width="150" on-selected="changeSort"></mc:selectbox>
+                                    <mc:searchbox class="item" config="$searchbox_opt"></mc:searchbox>
+                                    {{if data.addFormUrl.value !== ""}}
+                                    <mc:button class="item" label="新增" mcstyle="noborder" on-click="doAdd"></mc:button>
+                                    {{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    </mc:relativelayout>
+                </div>
+                <div slot="content1" class="mc-panel">
+                    <mc:datagrid ms-attr-identifier="$datagridId" config="$datagrid_opt" bind-size="page1" on-click-row="showDetails"></mc:datagrid>
+                </div>
+                <div slot="content2" class="mc-panel mc-bt">
+                    <mc:relativelayout padding="10px 15px">
+                        <div slot="content" class="cfa">
+                            <div class="rfp">
+                                <mc:datapager ms-attr-identifier="$datapagerId" config="$datapager_opt"></mc:datapager>
+                            </div>
+                        </div>
+                    </mc:relativelayout>
+                </div>
+            </mc:linearlayout>
+            <mc:sidepop ms-attr-identifier="$sidepopId" config="$edit_sidepop_opt" header-height="50">
+                <div class="headline" slot="cheader">{{data.pageName.value}}详情</div>
+                <mc:form slot="cbody" ms-attr-identifier="$formId" config="$edit_pop_opt">
+                    <div slot="content">
+                        {{each data.fieldList as item i}}
+                            {{each item.showPosition as positon j}}
+                            {{if positon.value && positon.key === "editForm"}}
+                                {{if item.formType === "text"}}
+                                    <mc:text label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:text>
+                                {{else if item.formType === "selectbox"}}
+                                    <mc:selectbox label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:selectbox>
+                                {{else if item.formType === "datepicker"}}
+                                    <mc:datepicker label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:datepicker>
+                                {{else if item.formType === "editor"}}
+                                    <mc:editor label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:editor>
+                                {{else if item.formType === "switch"}}
+                                    <mc:switch label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:switch>
+                                {{else if item.formType === "upload"}}
+                                    <mc:upload label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:upload>
+                                {{/if}}
+                            {{/if}}
+                            {{/each}}
+                        {{/each}}
+                    </div>
+                </mc:form>
+            </mc:sidepop>
+        </div>
+    </mc:absolutelayout>
+    
+    {{if data.addFormUrl.value !== ""}}
+    <!-- 新增弹出层 -->
+    <mc:dialog ms-attr-identifier="$addDialogId" config="$add_dialog_opt" title="新增{{data.pageName.value}}">
+        <mc:form slot="content" ms-attr-identifier="$addFormId" config="$add_form_opt">
+            <div slot="content">
+                {{each data.fieldList as item i}}
+                    {{each item.showPosition as positon j}}
+                    {{if positon.value && positon.key === "addForm"}}
+                        {{if item.formType === "text"}}
+                            <mc:text label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:text>
+                        {{else if item.formType === "selectbox"}}
+                            <mc:selectbox label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:selectbox>
+                        {{else if item.formType === "datepicker"}}
+                            <mc:datepicker label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:datepicker>
+                        {{else if item.formType === "editor"}}
+                            <mc:editor label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:editor>
+                        {{else if item.formType === "switch"}}
+                            <mc:switch label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:switch>
+                        {{else if item.formType === "upload"}}
+                            <mc:upload label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:upload>
+                        {{/if}}
+                    {{/if}}
+                    {{/each}}
+                {{/each}}
+            </div>
+        </mc:form>
+    </mc:dialog>
+    {{/if}}
+
+    <!-- 提示/确认框 -->
+    <mc:pop ms-attr-identifier="$popId"></mc:pop>
+</div>
+</script>
+
+<script id="CRUDJs" type="text/html">
+define(function () {
+    var data = null;
+    var vmain = avalon.define({
+        $id: '{{data.controllerName.value}}',
+        //#region 组件id
+        $datagridId: McAvalon.util.genId("_datagrid"), //数据表id
+        $datapagerId: McAvalon.util.genId("_datapager"), //分页id
+        $sidepopId: McAvalon.util.genId("_sidepopId"), //侧边弹出层id
+        $formId: McAvalon.util.genId("_form"), //侧边弹出层表单id
+        {{if data.addFormUrl.value !== ""}}
+        $addDialogId: McAvalon.util.genId("_addDialog"), //新增弹出层id
+        $addFormId: McAvalon.util.genId("_addForm"), //新增弹出层表单id
+        {{/if}}
+        $popId: McAvalon.util.genId("_pop"), //提示弹窗id 
+        //#endregion
+
+        //#region 页面配置
+        //布局配置项
+        $linearlayout_opt: {
+            data: {
+                _m: "v", _p: "content",
+                _c: [{
+                    _m: "v", w: "50", _p: "content0", s: "page0",
+                    _c: []
+                }, {
+                    _m: "v", w: "100%", _p: "content1", s: "page1",
+                    _c: []
+                }, {
+                    _m: "v", w: "50", _p: "content2", s: "page2",
+                    _c: []
+                }]
+            }
+        },
+        //面包屑配置项
+        $bread_opt: {
+            data: [
+                {
+                    text: "首页",
+                    href: "#!/"
+                },
+                {
+                    text: "{{data.pageName.value}}"
+                }
+            ]
+        },
+        //#endregion
+
+        //#region 排序
+        //根据条件排序
+        $sort_select_opt: {
+            data: [
+                {
+                    text: "默认",
+                    value: ""
+                }
+            ]
+        },
+        //改变排序条件事件
+        changeSort: function (ev, vm) {
+            var sortData = {
+                "OrderName": vm.getValue()
+            };
+            var datapagerVm = McAvalon.getVm(vmain.$datapagerId);
+            datapagerVm.addCondition(sortData);
+            datapagerVm.refreshPage();
+        },
+        //#endregion
+
+        //#region 搜索
+        $searchbox_opt: {
+            $search_type_opt: {
+                width: 110,
+                data: [
+                {{each data.searchList as item i}}
+                    {
+                        text: "{{item.text}}",
+                        value: "{{item.value}}"
+                    }
+                {{/each}}
+                ]
+            },
+            onSearch: function (ev, vm) {
+                var searchData = vm.getSearchData();
+                var datapagerVm = McAvalon.getVm(vmain.$datapagerId);
+                //先删除之前的条件
+                datapagerVm.delCondition([{{each data.searchList as item i}}{{if i !== 0}},{{/if}}"{{item.value}}"{{/each}}]);
+                datapagerVm.addCondition(searchData);
+                datapagerVm.refreshPage();
+            },
+            onCleanSearch: function (ev, vm) {
+                var datapagerVm = McAvalon.getVm(vmain.$datapagerId);
+                //先删除之前的条件
+                datapagerVm.delCondition([{{each data.searchList as item i}}{{if i !== 0}},{{/if}}"{{item.value}}"{{/each}}]);
+                datapagerVm.refreshPage();
+            }
+        },
+        //#endregion
+
+        //#region 表格显示
+        //数据表
+        $datagrid_opt: {
+            minWidth: 1100,
+            tableConfig: [
+                {{each data.fieldList as item i}}
+                    {{each item.showPosition as positon j}}
+                    {{if positon.value && positon.key === "datagrid"}}
+                        {
+                            {{if item.formType !== "text"}}type: "{{item.formType}}",{{/if}}
+                            headTxt: '{{item.label}}', dataId: '{{item.dataId}}', {{if item.width !== ""}}width: {{item.width}}{{/if}}
+                        },
+                    {{/if}}
+                    {{/each}}
+                {{/each}}
+                {{each data.operateList as item i}}
+                {
+                    type: "btn",
+                    {{if item.headTxt}}headTxt: {{item.headTxt}},{{/if}}
+                    label: "{{item.label}}",
+                    width: 180,
+                    onClick: function (vm, _vm) {
+                        var data = vm.getData()[_vm.trindex];
+                        var pop = McAvalon.getVm(vmain.$popId);
+                        pop.showConfirm("{{item.label}}{{data.pageName.value}}", "确认{{item.label}}吗?").done(function () {
+                            Mc.Ajax({
+                                url: "{{item.url}}",
+                                data: { Id: data.Id },
+                                success: function (result) {
+                                    McAvalon.getVm(vmain.$datapagerId).refreshPage(); //刷新表格数据
+                                    pop.showSuccessTip("{{item.label}}成功", 2000);
+                                },
+                                fail: function () {
+                                    pop.showFailTip("{{item.label}}失败");
+                                }
+                            });
+                        });
+                    }
+                },
+                {{/each}}
+            ]
+        },
+        //行选中事件,显示详情
+        showDetails: function (ev, vm, trIdx) {
+            McAvalon.getVm(vmain.$sidepopId).sidePopShow();
+            McAvalon.getVm(vmain.$formId).setDefaultData(vm.getData()[trIdx]).setData();
+        },
+        //页码
+        $datapager_opt: {
+            $ajaxConfig: {
+                url: "{{data.datagridUrl.value}}",
+            },
+            onDataChange: function (_vm) {
+                var response = _vm.getAjaxData();
+                _vm.setAllCount(response.total); //设置页码的allCount(数据总数)
+                McAvalon.getVm(vmain.$datagridId).setData(response.data); //给表格设置数据
+            }
+        },
+        //#endregion
+        
+        {{if data.addFormUrl.value !== ""}}
+        //#region 新增
+        //新增按钮事件
+        doAdd: function(){
+            McAvalon.getVm(vmain.$addFormId).setDefaultData({}).setData();
+            McAvalon.getVm(vmain.$addDialogId).showDialog();
+        },
+        //新增弹出层
+        $add_dialog_opt: {
+            buttons: [
+                {
+                    label: "添加",
+                    type: "success",
+                    callback: function (ev, vm) {
+                        McAvalon.getVm(vmain.$addFormId).submit(); //提交表单
+                    }
+                },
+                {
+                    label: "取消",
+                    callback: function () {
+                        return true;
+                    }
+                }
+            ]
+        },
+        //新增表单
+        $add_form_opt: {
+            labelSize: 150,
+            hasButtons: false,
+            $ajaxConfig: {
+                url: "{{data.addFormUrl.value}}"
+            },
+            onDataChange: function (vm) {
+                McAvalon.getVm(vmain.$datapagerId).refreshPage(); //刷新表格数据
+                var pop = McAvalon.getVm(vmain.$popId);
+                pop.showSuccessTip("新增成功", 2000);
+                McAvalon.getVm(vmain.$addDialogId).hideDialog({}, true);
+            }
+        },
+        //#endregion
+        {{/if}}
+
+        //#region 修改
+        //侧边弹出编辑层
+        $edit_sidepop_opt: {
+            size: "large"
+        },
+        //侧边弹出层表单
+        $edit_pop_opt: {
+            labelSize: 100,
+            {{if data.addFormUrl.value === ""}}
+            hasButtons: false
+            {{else}}
+            leftLabel: "保存",
+            rightLabel: "重置",
+            $ajaxConfig: {
+                url: "{{data.editFormUrl.value}}"
+            },
+            onDataChange: function (vm) {
+                McAvalon.getVm(vmain.$sidepopId).sidePopHide(); //关闭侧边弹出层
+                McAvalon.getVm(vmain.$datapagerId).refreshPage(); //刷新表格数据
+                var pop = McAvalon.getVm(vmain.$popId);
+                pop.showSuccessTip("保存成功", 2000);
+            }
+            {{/if}}
+        },
+        //#endregion
+    });
+    return avalon.controller(function ($ctrl) {
+        $ctrl.$onRendered = function () {
+            //初始化
+            var datapagerVm = McAvalon.getVm(vmain.$datapagerId);
+            datapagerVm && datapagerVm.changeCondition({});
+        }
+        $ctrl.$onEnter = function () {
+
+        }
+        $ctrl.$onBeforeUnload = function () {
+
+        }
+        $ctrl.$vmodels = [vmain];
+    });
+});
+</script>
+

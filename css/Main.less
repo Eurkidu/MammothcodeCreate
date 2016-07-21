@@ -1,0 +1,207 @@
+// out: ../css/Main.min.css, sourcemap: true, compress: true
+/*----------------------------
+    Style Create: 2015.7.5
+    Author: Zero
+    Style Overwrite: 2016-2-16 15:11:28
+    Author: Zero
+    Style Update: 2015.7.5
+    Author: Zero
+------------------------------*/
+
+//导入代码库
+@import "MammothcodeCoreLib.less";
+#McBaseLib;
+
+//页面初始化
+.mc_initialize;
+
+::selection{
+    background: #2F6E8E;
+}
+
+html,body{
+    height: 100%;
+}
+body{
+    padding: 5px;
+}
+.bg{
+    width: 100%;
+    height: 100%;
+    //border-radius: 5px;
+    .mc_bgNpCC("bg.jpg");
+    border: 1px solid @c_sc_2;
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+.app-focus{
+    //padding: 5px;
+    .bg{
+        border: 1px solid @c_sc_1;
+    }
+    .app-drag-bar{
+        .head-bar{
+            opacity: 1;
+        }
+    }
+}
+
+//App tool bar
+.app-drag-bar{
+    height: 38px;
+    padding: 10px;
+    background: rgba(0,0,0,0.4);
+    -webkit-app-region: drag;
+    .head-bar{
+        height: 15px;
+        line-height: 15px;
+        margin: 0 10px;
+        color: @c_nc_3;
+        opacity: .5;
+    }
+    .tool-set,
+    .tool-min,
+    .tool-close{
+        width: 16px;
+        height: 15px;
+        line-height: 15px;
+        margin: 0 3px;
+        color: #FFFFFF;
+        text-align: center;
+        -webkit-app-region: no-drag;
+        cursor: pointer;
+        i{
+            color: @c_nc_1;
+        }
+    }
+    .tool-min{
+        i{
+            font-size: 9px;
+        }
+    }
+    .tool-close{
+        i{
+            &:hover{
+                color: @c_mc;
+            }
+        }
+        i{
+            font-size: 12px;
+            #McBaseLib > .transition();
+        }
+    }
+}
+.app-page-cotar{
+    padding: 10px;
+    .main-box{
+        padding: 10px 17px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        background: rgba(255,255,255,.8);
+    }
+}
+
+//生成器首页
+.main-cotar{
+    //nav list
+    .nav-list{
+        height: 400px;
+        font-size: 14px;
+        >.item{
+            line-height: 25px;
+            span,a{
+                display: inline-block;
+                line-height: 1em;
+                color: @c_sc_1;
+                cursor: pointer;
+            }
+        }
+    }
+}
+
+//文档生成工具
+.doc-create-cotar{
+    //配置区域
+    .opt-box{
+        height: 240px;
+        .btn{
+            display: inline-block;
+            line-height: 1em;
+            padding: 3px 5px;
+            margin: 3px 0;
+            border-radius: 5px;
+            background: @c_sc_1;
+            color: @c_nc_1;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    }
+    //消息显示区域
+    .msg-box{
+        height: 380px;
+        .msg-wrap{
+            p{
+                margin: 5px 0;
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+//代码生成工具
+.code-create-cotar{
+    .main-box{
+        height: 630px;
+    }
+    //侧边组件工具栏
+    .slide-bar-cotar{
+        width: 200px;
+    }
+    //工作区域
+    .work-space-cotar{
+
+    }
+    //属性编辑区域
+    .property-cotar{
+        width: 300px;
+    }
+    //右键菜单
+    .menu-list-cotar{
+        position: absolute;
+        padding: 5px 12px;
+        background: @c_nc_1;
+        .mc_boxShadow;
+        >.item{
+            width: 100px;
+            margin: 5px 0;
+            line-height: 1.2em;
+            cursor: pointer;
+            &:hover{
+                color: @c_sc_1;
+            }
+        }
+    }
+    //代码显示区
+    .code-show-cotar{
+        position: fixed;
+        top: 53px;
+        left: 15px;
+        right: 15px;
+        bottom: 15px;
+        padding: 10px;
+        .mc_boxShadow;
+        background: @c_nc_1;
+        .btn{
+            line-height: 1em;
+        }
+        .code-wrap{
+            position: absolute;
+            top: 40px;
+            bottom: 0;
+            left: 10px;
+            right: 10px;
+            overflow: auto;
+        }
+    }
+}
