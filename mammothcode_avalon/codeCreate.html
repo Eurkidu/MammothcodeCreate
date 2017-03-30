@@ -240,13 +240,13 @@
                                     <mc:text label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:text>
                                 {{else if item.formType === "selectbox"}}
                                     <mc:selectbox label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:selectbox>
-                                {{else if item.formType === "datepicker"}}
+                                {{else if item.formType === "time"}}
                                     <mc:datepicker label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:datepicker>
                                 {{else if item.formType === "editor"}}
                                     <mc:editor label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:editor>
                                 {{else if item.formType === "switch"}}
                                     <mc:switch label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:switch>
-                                {{else if item.formType === "upload"}}
+                                {{else if item.formType === "img"}}
                                     <mc:upload label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:upload>
                                 {{/if}}
                             {{/if}}
@@ -270,13 +270,13 @@
                             <mc:text label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:text>
                         {{else if item.formType === "selectbox"}}
                             <mc:selectbox label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:selectbox>
-                        {{else if item.formType === "datepicker"}}
+                        {{else if item.formType === "time"}}
                             <mc:datepicker label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:datepicker>
                         {{else if item.formType === "editor"}}
                             <mc:editor label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:editor>
                         {{else if item.formType === "switch"}}
                             <mc:switch label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:switch>
-                        {{else if item.formType === "upload"}}
+                        {{else if item.formType === "img"}}
                             <mc:upload label="{{item.label}}" form-name="{{item.dataId}}" {{each item.fieldType as el k}}{{if el.value}}{{el.key}}='true'{{/if}} {{/each}}></mc:upload>
                         {{/if}}
                     {{/if}}

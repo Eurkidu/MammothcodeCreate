@@ -95,10 +95,11 @@ $(function(){
             formType: [
                 { label: "文本框", value: "text" },
                 { label: "下拉选择框", value: "selectbox" },
-                { label: "日期选择", value: "datepicker" },
+                { label: "日期选择", value: "time" }, //value-[datepicker]现在的value先存表格里面字段type对应的值，这样生成表格列的type时不需要判断了
                 { label: "文本编辑器", value: "editor" },
                 { label: "开关", value: "switch" },
-                { label: "上传", value: "upload" }
+                { label: "图片上传", value: "img" } //value-[upload]现在的value先存表格里面字段type对应的值，这样生成表格列的type时不需要判断了
+                //其实这个type的value最后表单元素和表格的type对应,这样就不用if判断,直接生成显示就好了
             ],
             $defaultCRUDdata: {
                 version: "0.1.2",
